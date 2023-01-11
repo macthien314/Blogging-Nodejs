@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const MemoryStore = require('memorystore')(session)
 // const flash = require('express-flash-notification');
 
 var flash = require('connect-flash');
@@ -76,6 +76,9 @@ app.use(cookieParser());
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
+  store: new MemoryStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  }),
   saveUninitialized: true,
   cookie: {
     maxAge: 5*60*1000
