@@ -1,0 +1,140 @@
+<% include ./../../helpers/filter-status %>
+<% include ./../../helpers/action %>
+<% include ./../../helpers/pagination %>
+<% include ./../../helpers/source-by %>
+<% include ./../../helpers/sort %>
+<% include ./../../helpers/selectbox %>
+<% include ./../../helpers/image %>
+<% include ./../../helpers/special %>
+
+<% 
+  const collection = "article";
+  const linkPrefix = systemConfig.prefixAdmin + `/${collection}/`;
+  const folderUpload = 'uploads/article/';
+%>
+<% include ./../../elements/notify %>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        Search & Filter
+        <a href="<%= linkPrefix %>status/all">
+          <span id="icon-reload" class="glyphicon glyphicon-refresh"></span>
+        </a>
+      </div>
+
+      <div class="panel-body">
+        <div class="row">
+          <div class="status-list col-sm-5 pl0">
+          <!-- Filter Status -->    
+          <%- filterStatusHelper(linkPrefix, statusFilter, params.keyword) %>
+          </div>
+          <div class="col-sm-2">
+            <%- selectboxHelper('filter_category', categoryItems, params.categoryID) %>
+          </div>
+
+          <div class="col-sm-5">
+            <form action="<%= linkPrefix %>status/<%= params.currentStatus %>" method="GET">
+              <div class="input-group">
+                <input type="text" class="form-control" name="keyword" placeholder="Search for..." value="<%= params.keyword %>">
+                <input type="hidden" value="all">
+
+                <span class="input-group-btn">
+                  <button class="btn btn-info" type="submit">Search</button>
+                </span>
+                <span class="input-group-btn">
+                  <button class="btn btn-success" type="button"><a href="<%= linkPrefix %>status/<%= params.currentStatus %>">Clear</a></button>
+                </span>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-lg-12">
+
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        List Article
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+        <form role="form" class="form-inline zt-form" id="zt-form" action="" method="post">
+         
+          <%- actionHelper(linkPrefix) %>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr class="text-center">
+                  <th>
+                    <input type="checkbox" class="cbAll" />
+                  </th>
+                  <th class="text-center">#</th>
+                  <%- sortHelper(linkPrefix, 'Name', 'name', params.sortField, params.sortType) %>
+									<th class="text-center" style="width:12%;">Thumb</th>
+									<%- sortHelper(linkPrefix, 'Status', 'status', params.sortField, params.sortType, 'width:10%') %>
+									<%- sortHelper(linkPrefix, 'Special', 'special', params.sortField, params.sortType, 'width:10%') %>
+									<%- sortHelper(linkPrefix, 'Ordering', 'ordering', params.sortField, params.sortType, 'width:10%') %>
+									<%- sortHelper(linkPrefix, 'Category', 'category.name', params.sortField, params.sortType, 'width:12%') %>
+									<th style="width:12%; text-align: center;">Created</th>
+									<!-- <th style="width:12%;">Modified</th> -->
+									<th style="width:12%; text-align: center;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% include ./../../helpers/status %>
+
+                <% if(users.length > 0) { %>
+                <% users.forEach((user, index) =>{ %>
+
+                  <tr class="text-center">
+                    <td class="text-left">
+                      <input type="checkbox" name="cid" value="<%= user.id %>" />
+                    </td>
+                    <td><%= index + 1 %></td>
+                    <td ><%= user.name %></td>
+                    <td >
+                      <%- imageHelper(folderUpload, user.thumb, user.name) %>
+                    </td>
+                    <td style="text-align:center">
+                      <%- statusHelper(linkPrefix, user.status, user.id) %>
+                    </td>
+                    <td><%- specialHelper(linkPrefix, user.special, user.id) %></td>
+                    <td><input type="number" value="<%= user.ordering %>" class="text-center ordering"></td>
+                   
+                    <td><%= user.category.name %></td>
+
+                    <td>
+                      <%- sourceByHelper(user.created.user_name, user.created.time) %>
+                    </td>
+                    <!-- <td>
+                      <%- sourceByHelper(user.modified.user_name, user.modified.time) %>
+                    </td> -->
+                    <td class="text-center">
+                      <a href="<%= linkPrefix %>form/<%= user.id %>" type="button" class="btn btn-warning btn-sm">Edit</a>
+                      <a href="<%= linkPrefix %>delete/<%= user.id %>" type="button" class="btn btn-danger btn-sm btn-delete">Delete</a>
+                    </td>
+                  </tr>
+                <% }) %>
+                 <% } else { %>
+                      <tr><td colspan="9"><h3>Không có dữ liệu</h3></td></tr>
+                 <% } %>
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12">
+
+   
+    <%- paginationHelper(params.pagination, params.currentStatus, linkPrefix, params.keyword) %>
+   
+  </div>
+</div>

@@ -1,0 +1,125 @@
+<% include ./../../helpers/filter-status %>
+<% include ./../../helpers/action %>
+<% include ./../../helpers/pagination %>
+<% include ./../../helpers/source-by %>
+<% include ./../../helpers/sort %>
+
+<%
+  const collection = "category";
+  const linkPrefix = systemConfig.prefixAdmin + `/${collection}/`;
+%>
+<% include ./../../elements/notify %>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        Search & Filter
+        <a href="<%= linkPrefix %>status/all">
+          <span id="icon-reload" class="glyphicon glyphicon-refresh"></span>
+        </a>
+      </div>
+
+      <div class="panel-body">
+        <div class="row">
+          <div class="status-list col-sm-6 pl0">
+          <!-- Filter Status -->
+         
+          <%- filterStatusHelper(linkPrefix, statusFilter, params.keyword) %>
+           
+
+          </div>
+          <div class="col-sm-6">
+            <form action="<%= linkPrefix %>status/<%= params.currentStatus %>" method="GET">
+              <div class="input-group">
+                <input type="text" class="form-control" name="keyword" placeholder="Search for..." value="<%= params.keyword %>">
+                <input type="hidden" value="all">
+
+                <span class="input-group-btn">
+                  <button class="btn btn-info" type="submit">Search</button>
+                </span>
+                <span class="input-group-btn">
+                  <button class="btn btn-success" type="button"><a href="<%= linkPrefix %>status/<%= params.currentStatus %>">Clear</a></button>
+                </span>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-lg-12">
+
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        List Category
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+        <form role="form" class="form-inline zt-form" id="zt-form" action="" method="post">
+         
+          <%- actionHelper(linkPrefix) %>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr class="text-center">
+                  <th>
+                    <input type="checkbox" class="cbAll" />
+                  </th>
+                  <th >#</th>
+                  <%- sortHelper(linkPrefix, 'Name', 'name', params.sortField , params.sortType, 'width:20%') %>
+                  <th class="text-center">Slug</th>
+                  <%- sortHelper(linkPrefix, 'Status', 'status', params.sortField , params.sortType) %>
+                  <%- sortHelper(linkPrefix, 'Ordering', 'ordering', params.sortField , params.sortType,'width:9%') %>
+                  <th class="text-center">Created</th>
+                  <th class="text-center">Modified</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% include ./../../helpers/status %>
+                <% categories.forEach((category, index) =>{ %>
+                  <!-- <h3><%= JSON.stringify(category) %></h3> -->
+                  <tr class="text-center">
+                    <td class="text-left">
+                      <input type="checkbox" name="cid" value="<%= category.id %>" />
+                    </td>
+                    <td class="text-left"><%= index + 1 %></td>
+                    <td><%= category.name %></td>
+                    <td><%= category.slug %></td>
+                    <td>
+                      <%- statusHelper(linkPrefix, category.status, category.id) %>
+                    </td>
+                    <td>
+                      <input type="number" value="<%= category.ordering %>" class="text-center ordering">
+                    </td>
+                    <td>
+                      <%- sourceByHelper(category.created.user_name, category.created.time) %>
+                    </td>
+                    <td>
+                      <%- sourceByHelper(category.modified.user_name, category.modified.time) %>
+                    </td>
+                    <td>
+                      <a href="<%= linkPrefix %>form/<%= category.id %>" type="button" class="btn btn-warning btn-sm">Edit</a>
+                      <a href="<%= linkPrefix %>delete/<%= category.id %>" type="button" class="btn btn-danger btn-sm btn-delete">Delete</a>
+                    </td>
+                  </tr>
+                <% }) %>
+                
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12">
+
+   
+    <%- paginationHelper(params.pagination, params.currentStatus, linkPrefix, params.keyword) %>
+   
+  </div>
+</div>

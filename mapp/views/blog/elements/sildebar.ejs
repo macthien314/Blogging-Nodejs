@@ -1,0 +1,63 @@
+
+<% include ./../helpers/format-date %>
+<%
+    const folder_uploads = 'uploads/article/';
+%>
+
+<div class="col-lg-4">
+    <div class="sidebars-area">
+        <% if(typeof itemsRandom !== 'undefined') { %>
+        <div class="single-sidebar-widget most-popular-widget">
+            <h6 class="title">Random Post</h6>
+            <% for(let i = 0; i < itemsRandom.length; i++) { %>
+            <div class="single-list flex-row d-flex">
+                <div class="thumb">
+                    <img src="<%= folder_uploads + itemsRandom[i].thumb %>" alt="<%= itemsRandom[i].name %>">
+                </div>
+                <div class="details">
+                    <a href="/article/<%= itemsRandom[i]._id %>">
+                        <h6><%= itemsRandom[i].name %></h6>
+                    </a>
+                    <ul class="meta">
+                        <li>
+                            <a href="#">
+                                <span class="lnr lnr-calendar-full"></span><%= formatDate(itemsRandom[i].created.time)%></a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="lnr lnr-bubble"></span>06</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <% } %> 
+        </div>
+        <% } %>
+        
+        <div class="single-sidebar-widget social-network-widget">
+            <h6 class="title">Social Networks</h6>
+            <div class='social'>
+                <div class='socBox'>
+                  <i class='fab fa-facebook-f'></i>
+                  <span>12,740 Likes</span>
+                </div>
+                <div class='socBox'>
+                  <i class='fab fa-pinterest'></i>
+                  <span>5,600 Fans</span>
+                </div>
+                <div class='socBox'>
+                  <i class='fab fa-twitter'></i>
+                  <span>8,700 Followers</span>
+                </div>
+                <div class='socBox'>
+                  <i class='fab fa-instagram'></i>
+                  <span>22,700 Followers</span>
+                </div>
+                <div class='socBox'>
+                  <i class='fab fa-youtube'></i>
+                  <span>2,700 Subscriber</span>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>

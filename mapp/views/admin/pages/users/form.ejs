@@ -1,0 +1,75 @@
+<% include ./../../helpers/selectbox %>
+<%
+  const collection = "users";
+  const linkPrefix = systemConfig.prefixAdmin + `/${collection}/`;
+  const folderUpload = 'uploads/users/';
+%>
+<% include ./../../helpers/image %>
+<!-- <%= JSON.stringify(user) %> -->
+<div class="row">
+  <div class="col-lg-12">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+              Form 
+          </div>
+          <div class="panel-body">
+            <% include ./../../elements/errors %> 
+              <div class="row">
+                  <div class="col-lg-6">
+                      <form role="form" action="<%= linkPrefix %>/save/" method="POST" enctype='multipart/form-data'>
+                          <div class="form-group">
+                            <label>User Name</label>
+                            <input class="form-control" name="username" value="<%= user.username %>" >
+                        </div>
+                        <div class="form-group">
+                          <label>Password</label>
+                          <input class="form-control" name="password" value="<%= user.password %>" >
+                      </div>
+                      <div class="form-group">
+                        <label>Full Name</label>
+                        <input class="form-control" name="name" value="<%= user.name %>" >
+                    </div>
+                          <div class="form-group">
+                            <label>Avatar</label>
+                            <input class="form-control" type="file" name="avatar">
+                          </div>
+                          <% if (user.id !== undefined && user.id !== '') { %>
+                            <div class="form-group">
+                              <label for=""></label>
+                              <%- imageHelper(folderUpload, user.avatar, user.name, "img-avatar-form") %>
+                            </div>
+                         <% }%>
+                          <div class="form-group">
+                              <label>Ordering</label>
+                              <input class="form-control" type="number" name="ordering" value="<%= user.ordering %>" >
+                          </div>
+                          <div class="form-group">
+                              <label>Status</label>
+                              <select name="status" class="form-control" >
+                                  <option value="novalue">Choose Status</option>
+                                  <option value="active"  <%= (user.status == "active") ? 'selected="selected"' : '' %> >Active</option>
+                                  <option value="inactive"<%= (user.status == "inactive") ? 'selected="selected"' : '' %> >Inactive</option>
+                              </select>
+                          </div> 
+                          <div class="form-group">
+                            <label>Group</label>
+                         <%- selectboxHelper('group_id', groupsItems , user.group_id) %>
+                          </div>
+                          <div class="form-group">
+                            <label>Content</label>
+                          <textarea class="form-control" name="content" rows="2" id="editor">
+                            <%= user.content %>
+                          </textarea>
+                          </div>                     
+                          <input class="form-control" name="id" value="<%= user.id %>" type="hidden" >
+                          <input name="image_old" value="<%= user.avatar %>" type="hidden"  />
+                          <input class="form-control" name="group_name" value="<%= user.group_name %>" type="hidden" >
+                          <button type="submit" class="btn btn-primary">Submit </button>
+                          <a type="button" href="<%= linkPrefix %>" class="btn btn-default">Cancel</a>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div> 

@@ -1,0 +1,60 @@
+<% include ./../helpers/format-date %>
+<%
+  const collection = "article";
+  const linkPrefix = systemConfig.prefixAdmin + `/${collection}/`;
+  const folderUpload = 'uploads/article/';
+%>
+
+<section class="top-post-area pt-10">
+    <div class="container no-padding">
+        <div class="row small-gutters">
+            <div class="col-lg-8 top-post-left mt-10">
+                <div class="feature-image-thumb relative">
+                    <div class="overlay overlay-bg"></div>
+                    <img class="img-fluid" src="<%= folderUpload + itemsSpecial[0].thumb %>" alt="">
+                </div>
+                <div class="top-post-details">
+                    <ul class="tags">
+                        <li>
+                            <a href="/category/<%= itemsSpecial[0].category.id %>"><%= itemsSpecial[0].category.name %></a>
+                        </li>
+                    </ul>
+                    <a href="/article/<%= itemsSpecial[0].id %>">
+                        <h3><%= itemsSpecial[0].name %></h3>
+                    </a>
+                    <ul class="meta">
+                        <li>
+                            <a href="#"><span class="lnr lnr-user"></span><%= itemsSpecial[0].created.user_name %></a>
+                        </li>
+                        <li>
+                            <a href="#"> <span class="lnr lnr-calendar-full"></span><%= formatDate(itemsSpecial[0].created.time) %></a>
+                        </li>
+           
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 top-post-right">
+                <% for(let i = 1; i < itemsSpecial.length; i++){ %>
+                    <div class="single-top-post mt-10">
+                        <div class="feature-image-thumb relative">
+                            <div class="overlay overlay-bg"></div>
+                            <img class="img-fluid" src="<%= folderUpload + itemsSpecial[i].thumb %>" alt="<%= itemsSpecial[i].name %>">
+                        </div>
+                        <div class="top-post-details">
+                            <ul class="tags">
+                                <li><a href="/category/<%= itemsSpecial[i].category.id %>"><%= itemsSpecial[i].category.name %></a></li>
+                            </ul>
+                            <a href="/article/<%= itemsSpecial[i].id %>">
+                                <h4><%= itemsSpecial[i].name %></h4>
+                            </a>
+                            <ul class="meta">
+                                <li><a href="#"><span class="lnr lnr-user"></span><%= itemsSpecial[i].created.user_name %></a></li>
+                                <li><a href="#"><span class="lnr lnr-calendar-full"></span><%= formatDate(itemsSpecial[i].created.time) %></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>

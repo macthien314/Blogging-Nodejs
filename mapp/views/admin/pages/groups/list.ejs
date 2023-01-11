@@ -1,0 +1,132 @@
+<% include ./../../helpers/filter-status %>
+<% include ./../../helpers/action %>
+<% include ./../../helpers/pagination %>
+<% include ./../../helpers/source-by %>
+<% include ./../../helpers/sort %>
+<% include ./../../helpers/group_acp %>
+
+
+
+<%
+  const collection = "groups";
+  const linkPrefix = systemConfig.prefixAdmin + `/${collection}/`;
+%>
+
+<% include ./../../elements/notify %>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        Search & Filter
+        <a href="<%= linkPrefix %>status/all">
+          <span id="icon-reload" class="glyphicon glyphicon-refresh"></span>
+        </a>
+      </div>
+
+      <div class="panel-body">
+        <div class="row">
+          <div class="status-list col-sm-6 pl0">
+          <!-- Filter Status -->
+         
+          <%- filterStatusHelper(linkPrefix, statusFilter, params.keyword) %>
+           
+
+          </div>
+          <div class="col-sm-6">
+            <form action="<%= linkPrefix %>status/<%= params.currentStatus %>" method="GET">
+              <div class="input-group">
+                <input type="text" class="form-control" name="keyword" placeholder="Search for..." value="<%= params.keyword %>">
+                <input type="hidden" value="all">
+
+                <span class="input-group-btn">
+                  <button class="btn btn-info" type="submit">Search</button>
+                </span>
+                <span class="input-group-btn">
+                  <button class="btn btn-success" type="button"><a href="<%= linkPrefix %>status/<%= params.currentStatus %>">Clear</a></button>
+                </span>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-lg-12">
+
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        List Groups
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+        <form role="form" class="form-inline zt-form" id="zt-form" action="" method="post">
+         
+          <%- actionHelper(linkPrefix) %>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>
+                    <input type="checkbox" class="cbAll" />
+                  </th>
+                  <th>#</th>
+                  <%- sortHelper(linkPrefix, 'Name', 'name', params.sortField , params.sortType, 'width:20%') %>
+                  <%- sortHelper(linkPrefix, 'Status', 'status', params.sortField , params.sortType) %>
+                  <%- sortHelper(linkPrefix, 'Ordering', 'ordering', params.sortField , params.sortType,'width:9%') %>
+                  <%- sortHelper(linkPrefix, 'Group ACP', 'group_acp', params.sortField , params.sortType,'width:11%') %>
+                  <th>Created</th>
+                  <th>Modified</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% include ./../../helpers/status %>
+                <% groups.forEach((group, index) =>{ %>
+                  <!-- <h3><%= JSON.stringify(group) %></h3> -->
+                  <tr>
+                    <td>
+                      <input type="checkbox" name="cid" value="<%= group.id %>" />
+                    </td>
+                    <td><%= index + 1 %></td>
+                    <td style="text-align:center;"><%= group.name %></td>
+                    <td style="text-align:center; padding-left: 2px;">
+                      <%- statusHelper(linkPrefix, group.status, group.id) %>
+                    </td>
+                    <td>
+                      <input type="number" value="<%= group.ordering %>" class="text-center ordering">
+                    </td>
+                    <td style="text-align:center;">          
+                      <%- groupACPHelper(linkPrefix, group.group_acp, group.id) %>
+                    </td>
+                    <td>
+                      <%- sourceByHelper(group.created.user_name, group.created.time) %>
+                    </td>
+                    <td>
+                      <%- sourceByHelper(group.modified.user_name, group.modified.time) %>
+                    </td>
+                   
+                    <td>
+                      <a href="<%= linkPrefix %>form/<%= group.id %>" type="button" class="btn btn-warning btn-sm">Edit</a>
+                      <a href="<%= linkPrefix %>delete/<%= group.id %>" type="button" class="btn btn-danger btn-sm btn-delete">Delete</a>
+                    </td>
+                  </tr>
+                <% }) %>
+                
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12">
+
+   
+    <%- paginationHelper(params.pagination, params.currentStatus, linkPrefix, params.keyword) %>
+   
+  </div>
+</div>
