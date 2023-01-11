@@ -72,7 +72,7 @@ var app = express();
 
 
 
-app.use(cookieParser());
+
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
