@@ -3,13 +3,13 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const MemoryStore = require('memorystore')(session)
+
 // const flash = require('express-flash-notification');
 
 var flash = require('connect-flash');
 
 const session = require('express-session');
-
+const MemoryStore = require('memorystore')(session)
 const pathConfig = require('./path');
 
 var passport = require('passport');
