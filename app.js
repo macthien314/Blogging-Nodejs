@@ -77,6 +77,7 @@ app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
+  store: new RedisStore(),
   cookie: {
     maxAge: 5*60*1000
   }
