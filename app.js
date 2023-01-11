@@ -72,12 +72,11 @@ var app = express();
 
 
 
-
+app.use(cookieParser());
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
-  store: new RedisStore(),
   cookie: {
     maxAge: 5*60*1000
   }
@@ -114,7 +113,6 @@ app.set('layout', __path_views_admin + 'backend');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Local variable
